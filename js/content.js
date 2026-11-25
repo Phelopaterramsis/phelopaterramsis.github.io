@@ -6,7 +6,7 @@ const CONTENT = {
   subtitle: 'Electrical & Computer Engineering master’s student at the University of Florida, with a B.Eng. in Renewable Energy Engineering from Zewail City, exploring AI, energy systems, optimization, and the technologies shaping the future.',
 
   links: {
-    email: 'ph.abdelmasseh@ufl.edu',
+    email: 'phelopater.ramsis1@gmail.com',
     linkedin: 'https://www.linkedin.com/in/phelopater',
     github: 'https://github.com/Phelopaterramsis',
     scholar: '',
