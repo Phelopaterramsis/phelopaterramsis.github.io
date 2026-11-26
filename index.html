@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,400..900&family=Hanken+Grotesk:ital,wght@0,400..700;1,400&family=Martian+Mono:wdth,wght@87.5,400..500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Phelopater Ramsis","alternateName":"Phelopater Abdelmasseh","jobTitle":"M.S. Student, Electrical & Computer Engineering","affiliation":{"@type":"CollegeOrUniversity","name":"University of Florida"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"Zewail City of Science and Technology"}],"email":"mailto:ph.abdelmasseh@ufl.edu","sameAs":["https://www.linkedin.com/in/phelopater","https://github.com/Phelopaterramsis"],"knowsAbout":["Energy systems","Machine learning","Power electronics","Smart grids","Optimization","Battery health"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Phelopater Ramsis","alternateName":"Phelopater Abdelmasseh","jobTitle":"M.S. Student, Electrical & Computer Engineering","affiliation":{"@type":"CollegeOrUniversity","name":"University of Florida"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"Zewail City of Science and Technology"}],"email":"mailto:phelopater.ramsis1@gmail.com","sameAs":["https://www.linkedin.com/in/phelopater","https://github.com/Phelopaterramsis"],"knowsAbout":["Energy systems","Machine learning","Power electronics","Smart grids","Optimization","Battery health"]}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -28,7 +28,6 @@
     <span class="mark-name">Phelo</span><span class="mark-zone" id="markZone" aria-hidden="true"></span>
   </a>
   <div class="hud-right">
-    <span class="hud-count" id="hudCount" aria-live="off"></span>
     <button class="hud-btn" id="motionBtn" aria-pressed="false" title="Reduce motion">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l3-7 4 14 3-7h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Motion</span></button>
     <a class="hud-btn hud-home" id="homeBtn" href="#home" data-go="home" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 11.5h3V21h5.5v-6h3v6H19v-9.5h3z"/></svg><span>Home</span></a>
@@ -61,7 +60,7 @@
       <span class="hq-label" id="hqLabel">Short on time?</span>
       <button class="qbtn" data-summary><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 5v4.6l3.5 2.1-1 1.7L11 12.7V7z"/></svg>1-minute summary</button>
       <button class="qbtn" data-pdf="cv"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h8l5 5v15H6zm7 1.5V8h4.5zM9 12h7v1.6H9zm0 3.4h7V17H9z"/></svg>View my CV</button>
-      <a class="qbtn" id="heroEmail" href="mailto:ph.abdelmasseh@ufl.edu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3zm2 2v.5l7 4.5 7-4.5V7z"/></svg>Email me</a>
+      <a class="qbtn" id="heroEmail" href="mailto:phelopater.ramsis1@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3zm2 2v.5l7 4.5 7-4.5V7z"/></svg>Email me</a>
     </div>
   </div>
   <p class="hero-status"><span class="led"></span><span id="heroStatus">Grid online. Scroll to start exploring.</span></p>
@@ -71,7 +70,7 @@
   <div class="wrap origin-grid">
     <div class="origin-stage"><div class="room" id="room"></div></div>
     <div class="origin-text">
-      <h2 id="h-origin">The human behind the system</h2>
+      <p class="ztag">Origin</p><h2 id="h-origin">About me</h2>
       <div id="chapters"></div>
       <div class="values-block"><h3>Pinned to the board</h3><ul class="values" id="values"></ul></div>
     </div>
@@ -79,7 +78,7 @@
 </section>
 
 <section id="journey" class="zone z-journey" data-zone="journey" aria-labelledby="h-journey">
-  <div class="wrap gl-head"><h2 id="h-journey">Egypt → Nebraska → Egypt → Florida → ?</h2>
+  <div class="wrap gl-head"><p class="ztag">Egypt → Nebraska → Egypt → Florida → ?</p><h2 id="h-journey">Journey</h2>
     <p class="lede">Five stops on one planet. Fly from place to place, or drag the globe to look around.</p></div>
   <div class="wrap gl-grid">
     <div class="gl-stage" id="glStage"><canvas id="globe" aria-hidden="true"></canvas><div class="gl-q" id="glQ" aria-hidden="true">?</div><p class="gl-tag" id="glTag" aria-hidden="true"></p></div>
@@ -93,25 +92,25 @@
 
 <section id="reactor" class="zone z-reactor" data-zone="reactor" aria-labelledby="h-reactor">
   <div class="wrap">
-    <h2 id="h-reactor">The knowledge reactor</h2>
-    <p class="lede">Four schools, one core. Each ring added a layer. Select a ring to see what it contributed.</p>
+    <p class="ztag">The knowledge reactor</p><h2 id="h-reactor">Education</h2>
+    <p class="lede">Four schools, one core. Select a ring to see what each one added.</p>
     <div class="rx-grid">
       <div class="rx-fig" id="rxFig"></div>
       <div class="rx-panel"><div class="rx-tabs" role="tablist" aria-label="Institutions" id="rxTabs"></div><div class="rx-detail" id="rxDetail" role="tabpanel"></div></div>
     </div>
-    <div class="fuel"><h3>Coursework that fed the reactor</h3><p class="fuel-note" id="fuelNote"></p><ul id="fuel"></ul></div>
+    <div class="fuel"><h3>Relevant coursework</h3><p class="fuel-note" id="fuelNote"></p><ul id="fuel"></ul></div>
   </div>
   <button class="secret-ball" id="secretBall" aria-label="A football is hiding here"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17" fill="#f1f1ec"/><path d="M20 11l8 6-3 9h-10l-3-9z" fill="#1d2433"/></svg></button>
 </section>
 
 <section id="lab" class="zone z-lab" data-zone="lab" aria-labelledby="h-lab">
   <div class="wrap">
-    <h2 id="h-lab">The lab</h2>
-    <p class="lede">Research and projects. Open a station to step inside the experiment.</p>
+    <p class="ztag">The lab</p><h2 id="h-lab">Projects & research</h2>
+    <p class="lede">Featured work. Open a project for the problem, my part, the method and the results.</p>
     <div class="bench" id="bench"></div>
     <div class="logbook">
-      <h3>Logbook: other builds</h3>
-      <table class="stack" id="logbook"><thead><tr><th scope="col">Build</th><th scope="col">What happened</th><th scope="col">Tools</th></tr></thead><tbody></tbody></table>
+      <h3>More projects</h3>
+      <table class="stack" id="logbook"><thead><tr><th scope="col">Project</th><th scope="col">What I did</th><th scope="col">Tools</th></tr></thead><tbody></tbody></table>
     </div>
   </div>
 </section>
@@ -119,8 +118,8 @@
 <section id="field" class="zone z-field" data-zone="field" aria-labelledby="h-field">
   <div class="sky" id="fieldSky"></div>
   <div class="wrap">
-    <h2 id="h-field">Field station</h2>
-    <p class="lede">Real-world engineering, from oil fields to rooftops. Flip a breaker to power up that feeder.</p>
+    <p class="ztag">Field station</p><h2 id="h-field">Experience</h2>
+    <p class="lede">Research and industry roles, from oil fields to rooftops. Flip a breaker to see each one.</p>
     <div class="gear">
       <div class="banks">
         <div class="bank"><h3>Industry & research</h3><div class="breakers" id="bkWork"></div></div>
@@ -132,8 +131,8 @@
 
 <section id="lead" class="zone z-lead" data-zone="lead" aria-labelledby="h-lead">
   <div class="wrap">
-    <h2 id="h-lead">Power, distributed</h2>
-    <p class="lede">Leadership, training and community: the part of engineering that runs on people.</p>
+    <p class="ztag">Power, distributed</p><h2 id="h-lead">Leadership & community</h2>
+    <p class="lede">Mentoring, training and organizing: the part of engineering that runs on people.</p>
     <div class="ld-top">
       <figure class="ld-stage">
         <div class="ld-scene" id="ldScene"></div>
@@ -149,86 +148,47 @@
 
 <section id="skills" class="zone z-skills" data-zone="skills" aria-labelledby="h-skills">
   <div class="wrap">
-    <h2 id="h-skills">Skills: the engineer’s inventory</h2>
-    <p class="lede">Grouped the way my CV groups them. No made-up percentages: select any tool to see where I’ve actually used it.</p>
+    <p class="ztag">The inventory</p><h2 id="h-skills">Skills</h2>
+    <p class="lede">No made-up percentages. Select any tool to see where I’ve used it.</p>
     <div class="inv"><div class="bags" id="bags"></div><aside class="item-card" id="itemCard" aria-live="polite"></aside></div>
   </div>
 </section>
 
 <section id="vault" class="zone z-vault" data-zone="vault" aria-labelledby="h-vault">
   <div class="wrap">
-    <h2 id="h-vault">Research archive</h2>
-    <p class="lede">Papers and work in progress, filed by status.</p>
+    <p class="ztag">The archive</p><h2 id="h-vault">Publications</h2>
+    <p class="lede">Papers and work in progress, with my contribution to each.</p>
     <div class="drawer" id="drawer"></div>
   </div>
 </section>
 
 <section id="output" class="zone z-output" data-zone="output" aria-labelledby="h-output">
   <div class="wrap">
-    <h2 id="h-output">Power output</h2>
+    <p class="ztag">Power output</p><h2 id="h-output">Awards & scholarships</h2>
     <p class="lede" id="outputLede">Awards, medals and scholarships, stacked by year. Select a cell for the story.</p>
     <div class="chamber"><div class="cols" id="cols"></div><div class="readout" id="readout" aria-live="polite"></div></div>
   </div>
 </section>
 
-<section id="cv" class="zone z-cv" data-zone="cv" aria-labelledby="h-cv">
-  <div class="wrap">
-    <div class="cv-head">
-      <div><h2 id="h-cv">The engineer’s terminal</h2><p class="lede">The recruiter-friendly version. Everything on one screen, nothing hidden behind animation.</p></div>
-      <div class="cv-actions"><button class="btn primary" id="cvView" data-pdf="cv">View my CV</button><a class="btn" id="cvDownload" href="assets/Phelopater_Ramsis_CV.pdf" download>Download PDF</a><button class="btn" id="paperBtn" aria-pressed="false">Paper view</button></div>
-    </div>
-    <div class="term" id="term">
-      <nav class="cmds" id="cmds" aria-label="CV sections"></nav>
-      <div class="term-out" id="termOut" tabindex="-1"></div>
-    </div>
-  </div>
-</section>
 
 <section id="offduty" class="zone z-off" data-zone="offduty" aria-labelledby="h-off">
   <div class="wrap">
-    <h2 id="h-off">Outside the circuit</h2>
-    <p class="lede">Engineering is what I do, not all I am. Click things.</p>
+    <p class="ztag">Off duty</p><h2 id="h-off">Beyond work</h2>
+    <p class="lede">Engineering is what I do, not all I am. Select anything in the scene.</p>
     <div class="off-wrap"><div class="off-scene" id="offScene"></div><div class="off-pop" id="offPop" role="status" aria-live="polite"></div></div>
     <ul class="off-legend" id="offLegend"></ul>
+    <div class="off-fact"><p class="off-fact-k">A fact about me</p><p id="factText" aria-live="polite"></p><button class="btn" id="factBtn">Another fact</button></div>
   </div>
 </section>
 
-<section id="ram" class="zone z-ram" data-zone="ram" aria-labelledby="h-ram">
-  <div class="wrap ram-grid">
-    <div class="lounge" id="lounge"><div class="lg-bubble" id="lgBubble"></div></div>
-    <div class="ram-side">
-      <h2 id="h-ram">The grid is optimized. I am not.</h2>
-      <p class="lede">Random access memory: small true facts, one at a time.</p>
-      <div class="chip" id="factChip">
-        <div class="chip-pins" aria-hidden="true"></div>
-        <p id="factText" aria-live="polite">Press the button. I’ll wake up. Probably.</p>
-        <span id="factCount"></span>
-      </div>
-      <button class="btn primary" id="factBtn">Random fact about me</button>
-    </div>
-  </div>
-</section>
 
-<section id="next" class="zone z-next" data-zone="next" aria-labelledby="h-next">
-  <div class="wrap">
-    <h2 id="h-next">Load forecast</h2>
-    <p class="lede">What’s done, what’s running, and what’s planned. Solid line: done. Dashed line: the plan, uncertainty included.</p>
-    <div class="fig fc-fig" id="fcFig"><svg id="fcSvg" role="img" aria-label="A timeline from 2017 to 2031: solid up to now, dashed with a widening band after"></svg></div>
-    <div class="fc-cols">
-      <div class="fc-col done"><h3>Done</h3><ul id="fcDone"></ul></div>
-      <div class="fc-col doing"><h3>Running now</h3><ul id="fcDoing"></ul></div>
-      <div class="fc-col plan"><h3>Next (the plan, not a promise)</h3><ul id="fcNext"></ul></div>
-    </div>
-    <p class="looking" id="looking"></p>
-  </div>
-</section>
 
 <section id="contact" class="zone z-contact" data-zone="contact" aria-labelledby="h-contact">
   <div class="sky" id="contactSky"></div>
   <div class="wrap contact-grid">
     <div>
-      <h2 id="h-contact">Every good connection starts with a signal.</h2>
-      <p class="lede">Research, internships, startup ideas, or football. I read everything.</p>
+      <p class="ztag">Transmission</p><h2 id="h-contact">Let’s talk</h2>
+      <p class="lede" id="looking">Open to research internships and collaborations in AI for energy systems.</p>
       <ul class="channels" id="channels"></ul>
     </div>
     <form class="composer" id="composer">
@@ -241,7 +201,7 @@
   </div>
 </section>
 </main>
-<footer class="foot"><div class="wrap foot-in"><p>Built around a real CV, by hand, with curiosity. Updated November 2026.</p><p id="footExplore"></p></div></footer>
+<footer class="foot"><div class="wrap foot-in"><p>© 2026 Phelopater Ramsis</p><p>Designed and built by hand. Updated November 2026.</p></div></footer>
 
 <aside class="buddy" id="buddy" aria-label="Phelo, your guide">
   <div class="buddy-bubble" id="buddyBubble" role="status" aria-live="polite"></div>
@@ -251,7 +211,7 @@
 <button class="buddy-show" id="buddyShow" hidden>Bring Phelo back</button>
 
 <dialog class="dlg map-dlg" id="mapDlg" aria-labelledby="mapTitle">
-  <div class="dlg-head"><h2 id="mapTitle">World map</h2><p id="mapCount"></p><button class="x" data-close aria-label="Close map">×</button></div>
+  <div class="dlg-head"><h2 id="mapTitle">Site map</h2><p id="mapCount">Jump to any section.</p><button class="x" data-close aria-label="Close map">×</button></div>
   <div class="map-body" id="mapBody"></div>
 </dialog>
 <dialog class="dlg proj-dlg" id="projDlg" aria-labelledby="projTitle"><div id="projBody"></div></dialog>
@@ -269,10 +229,9 @@
   <p>The real one. Same smile, fewer polygons.</p>
 </dialog>
 
-<div class="toasts" id="toasts" aria-live="polite"></div>
 <div class="travel" id="travel" aria-hidden="true"><span></span></div>
 
-<noscript><div class="noscript"><p>This site is an interactive world and needs JavaScript. The short version: Phelopater Ramsis, M.S. ECE student at the University of Florida, working on AI and energy systems. <a href="assets/Phelopater_Ramsis_CV.pdf">Download the CV</a> or email ph.abdelmasseh@ufl.edu.</p></div></noscript>
+<noscript><div class="noscript"><p>This site is an interactive world and needs JavaScript. The short version: Phelopater Ramsis, M.S. ECE student at the University of Florida, working on AI and energy systems. <a href="assets/Phelopater_Ramsis_CV.pdf">Download the CV</a> or email phelopater.ramsis1@gmail.com.</p></div></noscript>
 
 <script src="js/content.js"></script>
 <script src="js/character.js"></script>
