@@ -18,78 +18,31 @@
   if (calm === null) calm = mqReduce.matches;
 
   /* ---------------- ZONES ---------------- */
-  const WORK = ['reactor', 'lab', 'field', 'lead', 'skills', 'vault', 'output', 'cv', 'next'];
   const ZONES = [
-    { id: 'home', name: 'Home', sub: 'The grid at night', buddy: null },
-    { id: 'origin', name: 'Origin', sub: 'About me', buddy: null },
+    { id: 'home', name: 'Home', sub: 'Start', buddy: null },
+    { id: 'origin', name: 'About', sub: 'Origin', buddy: null },
     { id: 'journey', name: 'Journey', sub: 'Around the globe', buddy: null },
-    { id: 'reactor', name: 'Reactor', sub: 'Education', buddy: { pose: 'read', expr: 'focus', prop: 'paper' },
-      say: ['Four schools. One very busy core.', 'Select a ring. I’ll pretend I remember every lecture.', 'Each ring took a few years and a lot of coffee.'] },
-    { id: 'lab', name: 'Lab', sub: 'Projects & research', buddy: { pose: 'tablet', expr: 'focus', prop: 'tablet' },
-      say: ['Welcome to the lab. Please don’t touch the transformer.', 'Open the microgrid. It cut operating costs 32%, on paper.', 'The results are real. The lab coat is imaginary.'] },
-    { id: 'field', name: 'Field station', sub: 'Experience', buddy: { pose: 'tablet', expr: 'happy', prop: 'tablet', hat: 'hardhat' },
-      say: ['Hard hat on. Safety first, then solar.', 'Flip a breaker. They’re all rated for curiosity.'] },
-    { id: 'lead', name: 'Leadership', sub: 'People & training', buddy: { pose: 'point', expr: 'happy' },
-      say: ['Leadership is power distribution, with feelings.', 'Four of four milestones. Fully charged.', 'Click the slides. I promise there’s no quiz.'] },
-    { id: 'skills', name: 'Skills', sub: 'Tools & software', buddy: { pose: 'think', expr: 'focus' },
-      say: ['No “Python 97%” here. 97% of what?', 'Pick a tool. I’ll tell you where I actually used it.'] },
-    { id: 'vault', name: 'Archive', sub: 'Publications', buddy: { pose: 'read', expr: 'focus', prop: 'paper' },
-      say: ['One published, one cooking.', 'Peer reviewed. Mostly by Reviewer 2.'] },
-    { id: 'output', name: 'Power output', sub: 'Achievements', buddy: { pose: 'celebrate', expr: 'proud', prop: 'trophy' },
-      say: ['Trophy room. I promise I’m humble.', 'Started in 2019 with a water filter. Escalated from there.'] },
-    { id: 'cv', name: 'Terminal', sub: 'CV', buddy: { pose: 'point', expr: 'soft' },
-      say: ['The serious version. Recruiters, this one’s for you.', 'The download button is right there. No captcha.'] },
-    { id: 'offduty', name: 'Off duty', sub: 'Interests', buddy: null },
-    { id: 'ram', name: 'Lounge', sub: 'Fun facts', buddy: null },
-    { id: 'next', name: 'Forecast', sub: 'Now & next', buddy: { pose: 'think', expr: 'focus' },
-      say: ['Solid line: done. Dashed line: working on it.', 'Forecasts come with error bars. So do I.'] },
-    { id: 'contact', name: 'Transmission', sub: 'Contact', buddy: { pose: 'transmit', expr: 'happy', prop: 'radio' },
-      say: ['Signal’s strong. Say hi.', 'Every good connection starts with a signal. Yours is next.'] }
+    { id: 'reactor', name: 'Education', sub: 'The knowledge reactor', buddy: { pose: 'read', expr: 'focus', prop: 'paper' },
+      tip: 'Select a ring: high school sits at the core, UF on the outside.' },
+    { id: 'lab', name: 'Projects', sub: 'The lab', buddy: { pose: 'tablet', expr: 'focus', prop: 'tablet' },
+      tip: 'Open a project for the full story. The microgrid thesis is a good place to start.' },
+    { id: 'field', name: 'Experience', sub: 'Field station', buddy: { pose: 'tablet', expr: 'happy', prop: 'tablet', hat: 'hardhat' },
+      tip: 'Flip a breaker to see what I did in each role.' },
+    { id: 'lead', name: 'Leadership', sub: 'Power, distributed', buddy: { pose: 'point', expr: 'happy' },
+      tip: 'Select a node in the network to read about each role.' },
+    { id: 'skills', name: 'Skills', sub: 'The inventory', buddy: { pose: 'think', expr: 'focus' },
+      tip: 'Select a tool to see the projects where I used it.' },
+    { id: 'vault', name: 'Publications', sub: 'The archive', buddy: { pose: 'read', expr: 'focus', prop: 'paper' },
+      tip: 'Each record lists exactly what I contributed.' },
+    { id: 'output', name: 'Awards', sub: 'Power output', buddy: { pose: 'celebrate', expr: 'proud', prop: 'trophy' },
+      tip: 'Select a cell for the story behind each award.' },
+    { id: 'offduty', name: 'Beyond work', sub: 'Off duty', buddy: null },
+    { id: 'contact', name: 'Contact', sub: 'Transmission', buddy: { pose: 'transmit', expr: 'happy', prop: 'radio' },
+      tip: 'Email is the quickest way to reach me. I reply to every message.' }
   ];
   const ZI = Object.fromEntries(ZONES.map((z, i) => [z.id, i]));
-  const TRANS = {
-    'journey>reactor': 'All that walking. Time to study.',
-    'lab>field': 'From simulation to the real world. Grab a hard hat.',
-    'field>lead': 'From hard hats to people skills.',
-    'lead>skills': 'Now, the technical toolbox.',
-    'field>skills': 'Let me empty my pockets.',
-    'skills>vault': 'Now, the paperwork.',
-    'vault>output': 'Papers in, medals out.',
-    'output>cv': 'Okay, serious face. Recruiter mode.',
-    'ram>next': 'Back to work. The future won’t optimize itself.',
-    'offduty>next': 'Back to work. The future won’t optimize itself.',
-    'next>contact': 'If the forecast looks good, send a signal.',
-    'cv>field': 'Want the full story behind a line? Flip a breaker.',
-    'lab>reactor': 'Back to school? Brave.'
-  };
 
-  const state = { cur: null, prev: null, visits: {}, seen: new Set(store.get('seen', [])), ach: new Set(store.get('ach', [])), pokes: 0, overload: false, tired: false };
-
-  /* ---------------- TOASTS & ACHIEVEMENTS ---------------- */
-  const ACH = {
-    explorer: ['Grid fully energized', 'You visited every zone.', '⚡'],
-    poke: ['Persistent poker', 'You poked the engineer six times.', '!'],
-    ball: ['Secret ball found', 'There’s always a football somewhere.', '⚽'],
-    overload: ['Overload mode', 'Who touched the main breaker?', '⚡'],
-    gator: ['Florida local', 'You spotted the gator.', '🐊'],
-    tired: ['Engineer is tired', 'Leave him long enough and he naps.', 'z'],
-    goal: ['Top corner', 'Your first goal at the pitch.', '⚽'],
-    facts: ['Fully loaded', 'You read every fact in memory.', '★']
-  };
-  function toast(title, text, icon = '★') {
-    const t = document.createElement('div');
-    t.className = 'toast';
-    t.innerHTML = `<i aria-hidden="true">${esc(icon)}</i><span><b>${esc(title)}</b>${esc(text)}</span>`;
-    $('#toasts').append(t);
-    setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 450); }, 3600);
-  }
-  function unlock(key) {
-    const a = ACH[key];
-    if (!a) return;
-    const first = !state.ach.has(key);
-    state.ach.add(key); store.set('ach', [...state.ach]);
-    toast((first ? 'Achievement: ' : '') + a[0], a[1], a[2]);
-  }
+  const state = { cur: null, prev: null, seen: new Set(store.get('seen', [])), tips: new Set(), pokes: 0, overload: false, tired: false };
 
   /* ---------------- COMPANION ---------------- */
   const buddy = { el: $('#buddy'), btn: $('#buddyCh'), bubble: $('#buddyBubble'), svg: null, timer: 0, back: 0, hidden: store.get('buddyHidden', false), intro: false };
@@ -98,7 +51,11 @@
     buddy.svg = buddy.btn.querySelector('svg');
     buddy.el.classList.add('away');
     if (buddy.hidden) { buddy.el.hidden = true; $('#buddyShow').hidden = false; }
-    buddy.btn.addEventListener('click', () => poke(buddy.svg, say));
+    buddy.btn.addEventListener('click', () => {
+      const z = ZONES[ZI[state.cur]];
+      if (z && z.tip && !state.tips.has(z.id)) { state.tips.add(z.id); say(z.tip, 5200); return; }
+      poke(buddy.svg, say);
+    });
     $('#buddyHide').addEventListener('click', () => { buddy.hidden = true; store.set('buddyHidden', true); buddy.el.hidden = true; $('#buddyShow').hidden = false; $('#buddyShow').focus(); });
     $('#buddyShow').addEventListener('click', () => { buddy.hidden = false; store.set('buddyHidden', false); buddy.el.hidden = false; $('#buddyShow').hidden = true; dress(state.cur); say('I’m back. Did I miss anything?'); });
   }
@@ -131,7 +88,6 @@
     ];
     const r = R[state.pokes % R.length];
     state.pokes++;
-    if (state.pokes === 6) unlock('poke');
     const before = svg.dataset.pose, face = svg.querySelector('.ch-face')?.dataset.expr || 'happy';
     Character.setPose(svg, r.pose); Character.setFace(svg, r.expr);
     svg.classList.remove('waving', 'jump', 'shake'); void svg.getBBox;
@@ -180,27 +136,25 @@
     $('#rail').style.setProperty('--fillN', (i / (ZONES.length - 1)).toFixed(4));
     $$('#rail a').forEach(a => { a.classList.toggle('now', a.dataset.z === state.cur); a.classList.toggle('seen', state.seen.has(a.dataset.z)); a.toggleAttribute('aria-current', a.dataset.z === state.cur); });
     const hb = $('#homeBtn'); if (hb) hb.hidden = !state.cur || state.cur === 'home';
-    const n = state.seen.size, N = ZONES.length;
-    $('#hudCount').textContent = `Explored ${n} of ${N}`;
-    $('#heroStatus').textContent = n <= 1 ? 'Grid online. Scroll to start exploring.' : `Grid online. ${n} of ${N} zones explored.`;
-    $('#footExplore').textContent = n === N ? 'You explored every zone. The grid is fully energized.' : `You’ve explored ${n} of ${N} zones.`;
   }
 
   function mapRender() {
     const tall = innerWidth < 600;
-    const pos = tall
-      ? ZONES.map((z, i) => { const r = Math.floor(i / 3), c = i % 3; return [[62, 180, 298][r % 2 ? 2 - c : c], 44 + r * 118]; })
-      : [[90, 80], [270, 80], [450, 80], [630, 80], [810, 80], [900, 210], [720, 210], [540, 210], [360, 210], [180, 210], [90, 340], [270, 340], [450, 340], [630, 340], [810, 340]];
+    const cols = tall ? 3 : 4, rows = Math.ceil(ZONES.length / cols);
+    const pos = ZONES.map((z, i) => {
+      const r = Math.floor(i / cols), c = i % cols, k = r % 2 ? cols - 1 - c : c;
+      return tall ? [[62, 180, 298][k], 44 + r * 118] : [130 + k * 246, 80 + r * 130];
+    });
+    const vh = tall ? 44 + (rows - 1) * 118 + 76 : 80 + (rows - 1) * 130 + 80;
     let d = `M${pos[0][0]} ${pos[0][1]}`;
     pos.slice(1).forEach(p => { d += ` L${p[0]} ${p[1]}`; });
-    const svg = `<svg viewBox="${tall ? '0 0 360 600' : '0 0 1000 420'}" role="group" aria-label="Map of the zones">
+    const svg = `<svg viewBox="0 0 ${tall ? 360 : 1000} ${vh}" role="group" aria-label="Map of the zones">
       <path d="${d}" fill="none" stroke="#24406b" stroke-width="4"/><path class="pulse" d="${d}" fill="none" stroke="#46d9ff" stroke-width="4"/>
       ${ZONES.map((z, i) => `<g class="map-node ${state.seen.has(z.id) ? 'seen' : ''} ${z.id === state.cur ? 'now' : ''}" data-id="${z.id}" tabindex="0" role="button" aria-label="Travel to ${esc(z.name)}: ${esc(z.sub)}">
         <circle cx="${pos[i][0]}" cy="${pos[i][1]}" r="30" fill="transparent"/><circle class="n" cx="${pos[i][0]}" cy="${pos[i][1]}" r="15"/>
         <text x="${pos[i][0]}" y="${pos[i][1] + 40}" text-anchor="middle">${esc(z.name)}</text><text class="s" x="${pos[i][0]}" y="${pos[i][1] + 57}" text-anchor="middle">${esc(z.sub)}</text></g>`).join('')}
     </svg>`;
     $('#mapBody').innerHTML = svg;
-    $('#mapCount').textContent = `${state.seen.size} of ${ZONES.length} explored. Green means visited.`;
   }
   function mapInit() {
     const dlg = $('#mapDlg');
@@ -219,20 +173,11 @@
   function enterZone(id) {
     if (id === state.cur) return;
     state.prev = state.cur; state.cur = id;
-    state.visits[id] = (state.visits[id] || 0) + 1;
     state.seen.add(id); store.set('seen', [...state.seen]);
     railUpdate();
-    const z = ZONES[ZI[id]];
     const shown = !buddy.hidden && dress(id);
-    let line = TRANS[`${state.prev}>${id}`] || '';
-    if (!line && z.say) line = state.visits[id] > 1 ? pick([`Back in the ${z.name.toLowerCase()}? It missed you.`, ...z.say]) : z.say[0];
-    if (shown) {
-      if (!buddy.intro) { buddy.intro = true; say('Hi, I’m Phelo. I’ll tag along from here.', 3000); setTimeout(() => say(line), 3200); }
-      else setTimeout(() => say(line), 350);
-    }
-    if (id === 'ram') loungeEnter();
-    if (id === 'offduty') offEnter();
-    if (state.seen.size === ZONES.length && !state.ach.has('explorer')) unlock('explorer');
+    if (buddy.intro && !state.overload) { clearTimeout(buddy.timer); buddy.bubble.classList.remove('show'); }
+    if (shown && !buddy.intro) { buddy.intro = true; setTimeout(() => say('I’ll tag along from here. Tap me any time for a tip.', 4200), 400); }
   }
   function observeZones() {
     const io = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) enterZone(e.target.dataset.zone); }); }, { rootMargin: '-48% 0px -48% 0px' });
@@ -485,7 +430,11 @@
     cv.addEventListener('pointermove', e => { if (!st.drag) return; const d = st.drag; st.rot = [d.r[0] + (e.clientX - d.x) * 0.35, clamp(d.r[1] - (e.clientY - d.y) * 0.35, -75, 75), 0]; draw(); });
     const end = () => { st.drag = null; stage.classList.remove('grabbing'); loop(); };
     cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
-    card.addEventListener('click', e => { if (e.target.closest('.gator')) unlock('gator'); });
+    card.addEventListener('click', e => {
+      const g = e.target.closest('.gator'); if (!g) return;
+      g.classList.remove('bob'); void g.getBBox(); g.classList.add('bob');
+      tag.textContent = 'A real Florida local. Go Gators!'; tag.classList.add('show');
+    });
     new ResizeObserver(size).observe(stage);
     const io = new IntersectionObserver(es => { if (es[0].isIntersecting && !st.started) { st.started = true; setTimeout(() => flyTo(0), calm ? 0 : 350); } }, { threshold: 0.35 });
     io.observe(stage);
@@ -528,16 +477,17 @@
     $('#rxFig').addEventListener('click', e => { const g = e.target.closest('.rx-ring'); if (g) sel(+g.dataset.i); });
     sel(E.length - 1);
     $('#fuel').innerHTML = D.coursework.map(g => `<li class="fuel-g"><h4>${esc(g.group)}</h4><ul>${g.items.map(c => `<li>${esc(c)}</li>`).join('')}</ul></li>`).join('');
-    const nC = D.coursework.reduce((t, g) => t + g.items.length, 0); $('#fuelNote').textContent = `${nC} courses across electrical, mechanical, thermal, control and energy engineering.`;
+    const nC = D.coursework.reduce((t, g) => t + g.items.reduce((k, c) => k + (/ I & II/.test(c) ? 2 : 1), 0), 0);
+    $('#fuelNote').textContent = `${nC} courses across my bachelor’s and master’s.`;
     moreToggle($('#fuel').parentElement, $('#fuel'), `Show all ${nC} courses`, 'Show fewer courses');
-    $('#secretBall').addEventListener('click', () => { $('#secretBall').hidden = true; rollBall(); unlock('ball'); say('You found my ball! I’ve been looking everywhere.'); });
+    $('#secretBall').addEventListener('click', () => { $('#secretBall').hidden = true; rollBall(); say('You found my ball! I’ve been looking everywhere.'); });
   }
 
   /* ---------------- LAB ---------------- */
   function labInit() {
     $('#bench').innerHTML = D.projects.map((p, i) => `<button class="station" data-i="${i}" aria-haspopup="dialog">
       <span class="art">${Scenes.station(p.art)}</span>
-      <span class="plate"><small>${esc(p.status)}</small><b>${esc(p.title)}</b><span class="open">Open the experiment</span></span></button>`).join('');
+      <span class="plate"><small>${esc(p.status)}</small><b>${esc(p.title)}</b><span class="open">View project</span></span></button>`).join('');
     $('#bench').addEventListener('click', e => { const b = e.target.closest('.station'); if (b) openProject(+b.dataset.i); });
     let lastCat = '';
     const rows = D.logbook.map(l => {
@@ -546,15 +496,10 @@
       const name = l.url ? `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.name)}</a>` : esc(l.name);
       return head + `<tr><td>${name}</td><td>${esc(l.what)}</td><td>${esc(l.tools)}</td></tr>`;
     }).join('');
-    $('#logbook tbody').innerHTML = rows + `<tr class="classified"><td>Experiment #5</td><td>Classified. <button class="linkbtn" id="exp5">Try to open it</button></td><td>Unknown</td></tr>`;
+    $('#logbook tbody').innerHTML = rows;
     let nb = 0;
-    $$('#logbook tbody tr').forEach(tr => { if (!tr.classList.contains('lb-cat') && !tr.classList.contains('classified')) nb++; if (nb > 4 || (nb === 4 && tr.classList.contains('lb-cat'))) tr.classList.add('lb-more'); });
-    moreToggle($('#logbook').parentElement, $('#logbook'), `Show all ${D.logbook.length} builds`, 'Show fewer builds');
-    $('#exp5').addEventListener('click', () => {
-      const lines = ['Error 404: experiment not found. Probably still in my head.', 'Segmentation fault (idea dumped).', 'It worked on my machine.', 'Simulation diverged. Reducing time step… and expectations.', 'Access denied. Even I don’t have clearance.'];
-      if (!buddy.hidden) { Character.setPose(buddy.svg, 'confused'); Character.setFace(buddy.svg, 'confused'); setTimeout(() => dress(state.cur), 2600); }
-      say(pick(lines), 3200);
-    });
+    $$('#logbook tbody tr').forEach(tr => { if (!tr.classList.contains('lb-cat')) nb++; if (nb > 4 || (nb === 4 && tr.classList.contains('lb-cat'))) tr.classList.add('lb-more'); });
+    moreToggle($('#logbook').parentElement, $('#logbook'), `Show all ${D.logbook.length} projects`, 'Show fewer projects');
   }
   function openProject(i) {
     const p = D.projects[i];
@@ -583,7 +528,7 @@
     const sel = i => {
       const x = D.experience[i];
       $$('.brk').forEach(b => b.setAttribute('aria-checked', +b.dataset.i === i));
-      $('#feeder').innerHTML = `<span class="when">Feeder live · ${esc(x.when)}</span><h3>${esc(x.org)}</h3><p class="role">${esc(x.role)}</p>
+      $('#feeder').innerHTML = `<span class="when">${esc(x.when)}</span><h3>${esc(x.org)}</h3><p class="role">${esc(x.role)}</p>
         <ul>${x.did.map(d => `<li>${esc(d)}</li>`).join('')}</ul><div class="chips">${x.skills.map(s => `<span>${esc(s)}</span>`).join('')}</div>`;
     };
     $('.gear').addEventListener('click', e => { const b = e.target.closest('.brk'); if (b) sel(+b.dataset.i); });
@@ -681,13 +626,11 @@
       const k = all.push({ ...it, cat: b.cat, c: SK_C[b.key] }) - 1;
       return `<button class="slot ${it.used.length ? 'used' : ''}" aria-pressed="false" data-k="${k}" aria-label="${esc(it.n)}"><b>${esc(it.s)}</b><small>${esc(it.n)}</small></button>`;
     }).join('')}</div></div>`).join('') + `<p class="legend">A dot means I’ve used it in a project you can find on this site.</p>`;
-    let last = 0;
     const sel = k => {
       const it = all[k];
       $$('.slot').forEach(s => s.setAttribute('aria-pressed', +s.dataset.k === k));
       const card = $('#itemCard'); card.style.setProperty('--c', it.c);
       card.innerHTML = `<div class="sym">${esc(it.s)}</div><h3>${esc(it.n)}</h3><p class="cat">${esc(it.cat)}</p><h4>Where I’ve used it</h4>${it.used.length ? `<ul>${it.used.map(u => `<li>${esc(u)}</li>`).join('')}</ul>` : `<p class="none">In the toolkit. No project on this site shows it off yet.</p>`}`;
-      if (state.cur === 'skills' && Date.now() - last > 2500) { last = Date.now(); say(`Equipped: ${it.n}.`, 2000); }
     };
     const one = matchMedia('(max-width: 1100px)'), inv = $('#itemCard').parentElement;
     $('#bags').addEventListener('click', e => {
@@ -739,43 +682,6 @@
     sel(0);
   }
 
-  /* ---------------- CV TERMINAL ---------------- */
-  function cvInit() {
-    $('#cvDownload').href = D.links.cv;
-    const ex = D.experience, item = (t, d, sub, li) => `<div class="cv-item"><div class="top"><b>${esc(t)}</b><span class="d">${esc(d)}</span></div>${sub ? `<div class="sub">${esc(sub)}</div>` : ''}${li && li.length ? `<ul>${li.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}</div>`;
-    const S = {
-      summary: ['Summary', () => `<p>${esc(D.summary)}</p><h4 style="margin:18px 0 6px">Research interests</h4><ul class="cv-item" style="border:0;padding:0">${D.interestsResearch.map(x => `<li>${esc(x)}</li>`).join('')}</ul><p style="margin-top:14px">${esc(D.lookingFor)}</p>`],
-      education: ['Education', () => D.education.slice().reverse().map(e => item(`${e.degree}, ${e.name}`, e.when, e.where, e.notes)).join('')],
-      research: ['Research experience', () => item('Graduate Researcher, TEA Lab, University of Florida', 'Nov 2026 – now', 'PI: Dr. Ivan Ruchkin', ex.find(x => x.id === 'tea').did) + item('Research Intern, Power & Energy Lab, University of Nebraska–Lincoln', 'Aug – Dec 2023', '', ex.find(x => x.id === 'unl').did.concat(['Joined the lab on my own initiative: the first student from the Egyptian exchange cohort to do research there'])) + item('Undergraduate thesis: AI-based EMS for a hybrid electro-thermal microgrid', '2024 – 2025', 'Zewail City · Supervisor: Dr. Amgad A. El-Deib · Team lead', D.projects[0].method.concat(['32% lower operating cost, 20,000+ t/yr CO₂ reduction, 7.7-year payback']))],
-      experience: ['Work experience', () => ex.filter(x => x.bank === 'work' && x.id !== 'unl' && x.id !== 'tea').map(x => item(`${x.role}, ${x.org}`, x.when, '', x.did)).join('')],
-      projects: ['Projects', () => D.projects.map(p => item(p.title, p.when, p.status, [p.overview])).join('') + D.logbook.map(l => item(l.name, '', l.tools, [l.what])).join('')],
-      publications: ['Publications', () => D.publications.map(p => item(p.title, p.date || p.status, [p.authors, p.venue, p.doi ? 'DOI: ' + p.doi : ''].filter(Boolean).join(' · '), p.mine)).join('')],
-      awards: ['Awards & achievements', () => { const cn = Object.fromEntries(D.achievementCols); return D.achievements.map(a => item(a.t, cn[a.col], '', [a.d])).join(''); }],
-      leadership: ['Leadership, teaching & community', () => ex.filter(x => x.bank === 'people').map(x => item(`${x.role}, ${x.org}`, x.when, '', x.did)).join('')],
-      skills: ['Technical skills', () => `<dl class="cv-skills">${D.cvSkills.map(b => `<dt>${esc(b.cat)}</dt><dd>${esc(b.text)}</dd>`).join('')}</dl>`],
-      coursework: ['Related coursework', () => `<dl class="cv-skills">${D.coursework.map(g => `<dt>${esc(g.group)}</dt><dd>${g.items.map(esc).join(', ')}</dd>`).join('')}</dl>`]
-    };
-    const keys = Object.keys(S);
-    $('#cmds').innerHTML = keys.map(k => `<button data-k="${k}">${k}</button>`).join('');
-    const show = k => {
-      $$('#cmds button').forEach(b => b.setAttribute('aria-current', b.dataset.k === k));
-      $('#termOut').innerHTML = `<p class="prompt">phelo@grid:~$ cat ${k}.txt</p><h3>${esc(S[k][0])}</h3>${S[k][1]()}`;
-    };
-    const paper = () => {
-      const l = D.links;
-      $('#termOut').innerHTML = `<div class="cv-sec cv-paper-head"><h3>${esc(D.name)}</h3><p>${esc(l.email)} · ${esc(l.linkedin.replace(/^https?:\/\/(www\.)?/, ''))} · ${esc(l.github.replace(/^https?:\/\//, ''))}</p></div>` +
-        keys.map(k => `<section class="cv-sec"><h3>${esc(S[k][0])}</h3>${S[k][1]()}</section>`).join('');
-    };
-    $('#cmds').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { show(b.dataset.k); $('#termOut').scrollTop = 0; } });
-    $('#paperBtn').addEventListener('click', () => {
-      const on = $('#paperBtn').getAttribute('aria-pressed') !== 'true';
-      $('#paperBtn').setAttribute('aria-pressed', on); $('#paperBtn').textContent = on ? 'Terminal view' : 'Paper view';
-      $('#term').classList.toggle('paper', on);
-      if (on) paper(); else show('summary');
-    });
-    show('summary');
-  }
-
   /* ---------------- OFF DUTY ---------------- */
   const off = { ch: null, kicking: false };
   function offInit() {
@@ -787,22 +693,26 @@
     const act = id => {
       const it = D.interests.find(x => x.id === id);
       if (!it) return;
+      const think = $('#offScene .od-think');
+      think.classList.remove('show');
       if (id === 'football') { kick(); show(it.msg); return; }
-      show(it.msgs ? pick(it.msgs) : it.msg);
-      const poses = { gym: ['celebrate', 'proud'], coffee: ['coffee', 'soft', 'mug'], globe: ['point', 'happy'], robot: ['think', 'focus'], rocket: ['point', 'wow'], music: ['stand', 'proud'], swim: ['wave', 'wink'] };
+      const fam = id === 'family';
+      if (fam) { pop.classList.remove('show'); pop.textContent = it.msg; think.classList.add('show'); }
+      else show(it.msgs ? pick(it.msgs) : it.msg);
+      const poses = { gym: ['celebrate', 'proud'], family: ['think', 'soft'], globe: ['point', 'happy'], ai: ['think', 'focus'], rocket: ['point', 'wow'], music: ['stand', 'proud'], swim: ['celebrate', 'proud', 'trophy'] };
       const p = poses[id] || ['wave', 'happy'];
       Character.setGear(off.ch, { prop: p[2] || '' }); Character.setPose(off.ch, p[0]); Character.setFace(off.ch, p[1]);
-      clearTimeout(off.ch._t); off.ch._t = setTimeout(() => { Character.setGear(off.ch, { prop: '' }); Character.setPose(off.ch, 'stand'); Character.setFace(off.ch, 'happy'); }, 2600);
+      clearTimeout(off.ch._t); off.ch._t = setTimeout(() => { think.classList.remove('show'); Character.setGear(off.ch, { prop: '' }); Character.setPose(off.ch, 'stand'); Character.setFace(off.ch, 'happy'); }, fam ? 6500 : 2600);
     };
     $('#offduty').addEventListener('click', e => { const o = e.target.closest('[data-obj]'); if (o) act(o.dataset.obj); else if (e.target.closest('.od-ch')) act('football'); });
     $('#offScene').addEventListener('keydown', e => { const o = e.target.closest('.obj'); if (o && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); act(o.dataset.obj); } });
     off.show = show;
+    const order = D.facts.map((_, i) => i).sort(() => Math.random() - .5);
+    let fi = 0;
+    const fact = () => { const p = $('#factText'); p.textContent = D.facts[order[fi++ % order.length]]; p.classList.remove('flash'); void p.offsetWidth; p.classList.add('flash'); };
+    $('#factText').textContent = D.facts[order[fi++]];
+    $('#factBtn').addEventListener('click', fact);
     const sc = $('#offScene'); requestAnimationFrame(() => { if (sc.scrollWidth > sc.clientWidth) sc.scrollLeft = (sc.scrollWidth - sc.clientWidth) * .55; });
-  }
-  function offEnter() {
-    const from = state.prev;
-    const t = from === 'cv' ? 'Recruiters gone? Good. Let’s play.' : WORK.includes(from) ? 'Off duty. Laptop closed. Mostly.' : 'Welcome to the fun part. Click the ball.';
-    setTimeout(() => off.show && off.show(t), 500);
   }
   function kick() {
     if (off.kicking) return;
@@ -812,7 +722,6 @@
     const done = () => {
       Character.setPose(off.ch, 'celebrate'); Character.setFace(off.ch, 'proud'); off.ch.classList.add('jump');
       gol.classList.add('show');
-      if (!state.ach.has('goal')) unlock('goal');
       setTimeout(() => { gol.classList.remove('show'); off.ch.classList.remove('jump'); Character.setPose(off.ch, 'stand'); Character.setFace(off.ch, 'happy'); ball.style.transform = ''; off.kicking = false; }, 2200);
     };
     if (calm || !ball.animate) { setTimeout(done, 300); return; }
@@ -821,68 +730,6 @@
       const a = ball.animate([{ transform: 'translate(0,0) rotate(0deg)' }, { transform: 'translate(150px,-290px) rotate(380deg)', offset: .5 }, { transform: 'translate(300px,-200px) rotate(720deg)' }], { duration: 900, easing: 'cubic-bezier(.3,.6,.4,1)', fill: 'forwards' });
       a.onfinish = () => { done(); setTimeout(() => a.cancel(), 2100); };
     }, 220);
-  }
-
-  /* ---------------- FUN FACTS ---------------- */
-  const ram = { ch: null, order: [], pos: 0, t: 0, read: new Set() };
-  function ramInit() {
-    $('#lounge').insertAdjacentHTML('afterbegin', Scenes.lounge());
-    ram.ch = $('#lounge .ch-lounge');
-    ram.order = D.facts.map((_, i) => i).sort(() => Math.random() - .5);
-    $('#factBtn').addEventListener('click', nextFact);
-    ram.ch.addEventListener('click', nextFact);
-  }
-  function lgSay(t, ms = 3600) { const b = $('#lgBubble'); b.textContent = t; b.classList.add('show'); clearTimeout(b._t); b._t = setTimeout(() => b.classList.remove('show'), ms); }
-  function loungeEnter() {
-    const t = WORK.includes(state.prev) ? 'Shift’s over. The grid is optimized. I am not.' : state.prev === 'offduty' ? 'That match wore me out.' : 'Shh. Recharging.';
-    setTimeout(() => lgSay(t), 400);
-  }
-  function nextFact() {
-    const i = ram.order[ram.pos % ram.order.length]; ram.pos++;
-    ram.read.add(i);
-    const p = $('#factText'); p.textContent = D.facts[i]; p.classList.remove('flash'); void p.offsetWidth; p.classList.add('flash');
-    $('#factCount').textContent = `Fact ${ram.read.size} of ${D.facts.length} loaded`;
-    $('#lounge').classList.add('awake');
-    const reacts = [['sitcoffee', 'wow', 'mug', 'Huh? Oh, a fact. Here.'], ['sitwave', 'wink', '', 'That one’s true, I swear.'], ['sitthink', 'focus', '', 'Let me think of a better one…'], ['sitcoffee', 'happy', 'mug', 'Okay, I’m awake now.']];
-    const r = pick(reacts);
-    Character.setGear(ram.ch, { prop: r[2] }); Character.setPose(ram.ch, r[0]); Character.setFace(ram.ch, r[1]);
-    ram.ch.classList.toggle('waving', r[0] === 'sitwave');
-    lgSay(r[3], 2400);
-    clearTimeout(ram.t);
-    ram.t = setTimeout(() => { $('#lounge').classList.remove('awake'); Character.setGear(ram.ch, { prop: '' }); Character.setPose(ram.ch, 'doze'); Character.setFace(ram.ch, 'sleep'); ram.ch.classList.remove('waving'); }, 8000);
-    if (ram.read.size === D.facts.length && !state.ach.has('facts')) unlock('facts');
-  }
-
-  /* ---------------- FORECAST ---------------- */
-  function forecastInit() {
-    $('#fcDone').innerHTML = D.done.map(x => `<li>${esc(x)}</li>`).join('');
-    $('#fcDoing').innerHTML = D.doing.map(x => `<li>${esc(x)}</li>`).join('');
-    $('#fcNext').innerHTML = D.next.map(x => `<li>${esc(x)}</li>`).join('');
-    $('#looking').textContent = D.lookingFor;
-    const s = $('#fcSvg');
-    const pts = [[2017.7, .08, 'STEM high school'], [2019.4, .17, 'ICAN gold'], [2020.8, .26, 'Zewail City'], [2023.8, .42, 'Nebraska lab'], [2024.6, .48, 'Elsewedy'], [2025.5, .57, 'B.Eng.'], [2026.45, .64, 'First paper', 1], [2026.7, .67, '']];
-    const plan = [[2027.5, .74, 'Summer research'], [2028.4, .82, 'M.S. thesis'], [2030.6, .95, 'A company?']];
-    const NOW = 2026.9;
-    const draw = () => {
-      const W = s.clientWidth, H = s.clientHeight, m = { l: 30, r: 20, t: 26, b: 36 }, narrow = W < 560;
-      const X = y => m.l + (y - 2017) / (2031.5 - 2017) * (W - m.l - m.r), Y = v => H - m.b - v * (H - m.t - m.b);
-      const path = a => a.map((p, i) => `${i ? 'L' : 'M'}${X(p[0]).toFixed(1)} ${Y(p[1]).toFixed(1)}`).join(' ');
-      const nowY = .7, fut = [[NOW, nowY], ...plan];
-      const up = fut.map(p => [p[0], p[1] + (p[0] - NOW) * .03]), dn = fut.map(p => [p[0], p[1] - (p[0] - NOW) * .045]);
-      const band = path(up) + ' ' + dn.reverse().map(p => `L${X(p[0]).toFixed(1)} ${Y(p[1]).toFixed(1)}`).join(' ') + 'Z';
-      let o = '';
-      for (let y = 2017; y <= 2031; y += narrow ? 3 : 1) o += `<text x="${X(y)}" y="${H - 12}" text-anchor="middle" font-size="12" fill="#7d8fae">${narrow ? "'" + String(y).slice(2) : y}</text><path d="M${X(y)} ${m.t} V${H - m.b}" stroke="rgba(150,190,255,.07)"/>`;
-      o += `<text x="${m.l}" y="${m.t - 8}" font-size="12" fill="#7d8fae">Capability (uncalibrated, illustrative)</text>`;
-      o += `<path d="${band}" fill="rgba(255,181,71,.14)" stroke="rgba(255,181,71,.25)"/>`;
-      o += `<path d="${path([...pts.map(p => [p[0], p[1]]), [NOW, nowY]])}" fill="none" stroke="#43eba0" stroke-width="3" stroke-linejoin="round"/>`;
-      o += `<path d="${path(fut)}" fill="none" stroke="#ffb547" stroke-width="2.6" stroke-dasharray="7 7"/>`;
-      o += `<path d="M${X(NOW)} ${m.t} V${H - m.b}" stroke="#46d9ff" stroke-width="1.5"/><text x="${X(NOW) - 6}" y="${H - m.b - 8}" text-anchor="end" font-size="13" font-weight="700" fill="#46d9ff">Now</text>`;
-      pts.forEach((p, i) => { const show = p[2] && (!narrow || [0, 3, 5].includes(i)); o += `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="5" fill="#43eba0"/>` + (show ? `<text x="${X(p[0]) + (p[3] ? -8 : 0)}" y="${Y(p[1]) + (p[3] ? 22 : -12)}" text-anchor="${p[3] ? 'end' : 'middle'}" font-size="12.5" fill="#d5e0f0">${esc(p[2])}</text>` : ''); });
-      plan.forEach((p, k) => { if (narrow && k < plan.length - 1) { o += `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="5" fill="none" stroke="#ffb547" stroke-width="2"/>`; return; } o += `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="5" fill="none" stroke="#ffb547" stroke-width="2"/><text x="${X(p[0]) + (p[0] > 2030 ? -10 : 0)}" y="${Y(p[1]) + (p[0] > 2030 ? -14 : 28)}" text-anchor="${p[0] > 2030 ? 'end' : 'middle'}" font-size="12.5" fill="#ffd9a8">${esc(p[2])}</text>`; });
-      s.setAttribute('viewBox', `0 0 ${W} ${H}`);
-      s.innerHTML = o;
-    };
-    const ro = new ResizeObserver(draw); ro.observe(s);
   }
 
   /* ---------------- CONTACT ---------------- */
@@ -895,6 +742,7 @@
   };
   function contactInit() {
     $('#contactSky').innerHTML = Scenes.contactSky();
+    $('#looking').textContent = D.lookingFor;
     const L = D.links, strip = u => u.replace(/^https?:\/\/(www\.)?/, '');
     const rows = [
       ['mail', 'Email', `<a href="mailto:${esc(L.email)}">${esc(L.email)}</a>`, `<button class="copy" data-copy="${esc(L.email)}">Copy</button>`],
@@ -930,7 +778,7 @@
       const sec = document.getElementById(z.id), nx = ZONES[i + 1];
       if (!sec) return;
       const nav = document.createElement('nav');
-      const inner = { origin: '.origin-text', ram: '.ram-side' }[z.id];
+      const inner = { origin: '.origin-text' }[z.id];
       const own = z.id === 'journey' || z.id === 'contact';
       nav.className = 'zone-nav' + (own ? ' wrap' : '');
       nav.setAttribute('aria-label', `${z.name}: navigation`);
@@ -972,7 +820,7 @@
       sec('Experience', `<ul>${W.map(x => li(x.role, x.when, x.org)).join('')}</ul>`),
       sec('Research interests', `<ul>${D.interestsResearch.map(x => `<li><span>${esc(x)}</span></li>`).join('')}</ul>`),
       sec('Leadership & community', `<ul>${P.map(x => li(x.role, x.when, x.org)).join('')}</ul>`),
-      sec('Coursework', `<dl>${D.coursework.map(g => `<dt>${esc(g.group)}</dt><dd>${g.items.slice(0, 6).map(esc).join(', ')}${g.items.length > 6 ? '…' : ''}</dd>`).join('')}</dl>`)
+      sec('Coursework', `<dl>${D.coursework.slice(0, 5).map(g => `<dt>${esc(g.group)}</dt><dd>${g.items.slice(0, 6).map(esc).join(', ')}${g.items.length > 6 ? '…' : ''}</dd>`).join('')}</dl>`)
     ].join('');
     const right = [
       sec('Selected projects', `<ul>${D.projects.map(p => li(p.title, '', brief(p))).join('')}${D.logbook.slice(0, 3).map(l => li(l.name, '', l.tools)).join('')}</ul>`),
@@ -992,7 +840,7 @@
       <p class="sum-lead">${esc(D.summary)}</p>
       <p class="sum-look"><span class="led"></span>${esc(D.lookingFor)}</p>
       <div class="sum-grid"><div>${left}</div><div>${right}</div></div>
-      <div class="sum-foot"><p>Want the full story, with the character, the lab and the easter eggs?</p><button class="btn primary" data-sumhome>Explore the full world</button><a class="btn" href="${email}">Email me</a></div>
+      <div class="sum-foot"><p>Want the story behind each line? The full site has every project, role and award in detail.</p><button class="btn primary" data-sumhome>Explore the full site</button><a class="btn" href="${email}">Email me</a></div>
     </div>`;
   }
   function openSummary() {
@@ -1061,7 +909,6 @@
     state.overload = !state.overload;
     root.classList.toggle('overload', state.overload);
     if (state.overload) {
-      unlock('overload');
       if (hero.say) hero.say('OVERLOAD! Who touched the main breaker?', 3200);
       if (!buddy.hidden && ZONES[ZI[state.cur]]?.buddy) { Character.setPose(buddy.svg, 'celebrate'); Character.setFace(buddy.svg, 'wow'); }
       say('OVERLOAD! Type “overload” again or click the data center 5 times to calm it down.', 4200);
@@ -1078,11 +925,10 @@
         if (!zz) buddy.el.insertAdjacentHTML('beforeend', '<span class="zz" aria-hidden="true">z z Z</span>');
       }
       if (hero.ch) Character.setFace(hero.ch, 'sleep');
-      if (!state.ach.has('tired')) unlock('tired');
     } else {
       zz?.remove();
       if (hero.ch) Character.setFace(hero.ch, 'happy');
-      if (state.cur && ZONES[ZI[state.cur]]?.buddy) { dress(state.cur); say(pick(['I was just… optimizing my eyelids.', 'I’m up. I’m up. Where were we?', 'Low-power mode. Sorry. Back now.'])); }
+      if (state.cur && ZONES[ZI[state.cur]]?.buddy) dress(state.cur);
     }
   }
   function eggsInit() {
@@ -1105,11 +951,6 @@
     const wake = () => { clearTimeout(idle); if (state.tired) sleepMode(false); idle = setTimeout(() => sleepMode(true), 60000); };
     ['pointerdown', 'keydown', 'scroll', 'pointermove'].forEach(ev => addEventListener(ev, wake, { passive: true }));
     wake();
-    setInterval(() => {
-      const z = ZONES[ZI[state.cur]];
-      if (document.hidden || state.tired || buddy.hidden || !z || !z.buddy || buddy.bubble.classList.contains('show')) return;
-      if (Math.random() < .5) say(pick(z.say));
-    }, 40000);
     console.log('%c⚡ Hi, fellow engineer.', 'font:700 16px sans-serif;color:#46d9ff', '\nYou opened the console, so you’re my kind of person.\nTry typing “overload”, “sleep”, “coffee” or “messi” on the page. Or the Konami code.');
   }
 
@@ -1141,10 +982,7 @@
   safe('skills', skillsInit);
   safe('vault', vaultInit);
   safe('output', outputInit);
-  safe('cv', cvInit);
   safe('offduty', offInit);
-  safe('ram', ramInit);
-  safe('forecast', forecastInit);
   safe('contact', contactInit);
   safe('hud', () => {
     const hud = $('.hud'), f = () => hud.classList.toggle('solid', scrollY > 24);

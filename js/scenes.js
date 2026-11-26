@@ -303,6 +303,43 @@ const Scenes = (() => {
   }
 
   /* ------------------------------ OFF DUTY ------------------------------ */
+  const SK = { skin: '#d79a76', skinSh: '#b8775a', eye: '#1b120e', mouth: '#5e1c22' };
+  function person(x, base, h, o) {
+    const r = h * .15, hy = base - h + r, sh = hy + r + 2, waist = base - h * .4, bw = h * .3, hair = '#2a1c14';
+    const arm = (sx, [hx, hyy]) => `<path d="M${sx} ${sh + 4} L${hx} ${hyy}" stroke="${o.top}" stroke-width="${h * .085}" stroke-linecap="round"/><circle cx="${hx}" cy="${hyy}" r="${h * .045}" fill="${SK.skin}"/>`;
+    const legs = o.dress
+      ? `<rect x="${x - bw * .32}" y="${base - h * .22}" width="${h * .07}" height="${h * .2}" fill="${SK.skin}"/><rect x="${x + bw * .32 - h * .07}" y="${base - h * .22}" width="${h * .07}" height="${h * .2}" fill="${SK.skin}"/>`
+      : `<rect x="${x - bw * .42}" y="${waist - 2}" width="${bw * .4}" height="${base - waist}" rx="3" fill="${o.legs}"/><rect x="${x + bw * .02}" y="${waist - 2}" width="${bw * .4}" height="${base - waist}" rx="3" fill="${o.legs}"/>`;
+    const body = o.dress
+      ? `<path d="M${x - bw / 2} ${sh + 3} Q${x} ${sh - 3} ${x + bw / 2} ${sh + 3} L${x + bw * .72} ${base - h * .2} H${x - bw * .72}Z" fill="${o.top}"/>`
+      : `<rect x="${x - bw / 2}" y="${sh}" width="${bw}" height="${waist - sh + 2}" rx="${bw * .3}" fill="${o.top}"/>`;
+    const back = o.long ? `<rect x="${x - r * 1.12}" y="${hy - r * .4}" width="${r * 2.24}" height="${r * (o.dress ? 2.3 : 2)}" rx="${r * .9}" fill="${hair}"/>` : '';
+    const tail = o.tail ? `<ellipse cx="${x + r * 1.15}" cy="${hy - r * .15}" rx="${r * .45}" ry="${r * .8}" fill="${hair}" transform="rotate(-20 ${x + r * 1.15} ${hy})"/>` : '';
+    const cap = o.long
+      ? `<path d="M${x - r * 1.05} ${hy + r * .2} C${x - r * 1.2} ${hy - r * 1.3} ${x + r * 1.2} ${hy - r * 1.3} ${x + r * 1.05} ${hy + r * .2} C${x + r * .7} ${hy - r * .55} ${x - r * .1} ${hy - r * .7} ${x - r * 1.05} ${hy + r * .2}Z" fill="${hair}"/>`
+      : `<path d="M${x - r * 1.02} ${hy - r * .05} C${x - r * 1.1} ${hy - r * 1.25} ${x + r * 1.1} ${hy - r * 1.25} ${x + r * 1.02} ${hy - r * .05} C${x + r * .6} ${hy - r * .62} ${x - r * .6} ${hy - r * .62} ${x - r * 1.02} ${hy - r * .05}Z" fill="${hair}"/>`;
+    return `<g>${back}${tail}${legs}<ellipse cx="${x - bw * .22}" cy="${base}" rx="${h * .07}" ry="${h * .03}" fill="#333a52"/><ellipse cx="${x + bw * .22}" cy="${base}" rx="${h * .07}" ry="${h * .03}" fill="#333a52"/>
+      ${arm(x - bw / 2, o.lh)}${arm(x + bw / 2, o.rh)}${body}<rect x="${x - r * .3}" y="${hy + r * .8}" width="${r * .6}" height="${r * .5}" fill="${SK.skinSh}"/><circle cx="${x}" cy="${hy}" r="${r}" fill="${SK.skin}"/>${cap}
+      <circle cx="${x - r * .36}" cy="${hy + r * .05}" r="${r * .11}" fill="${SK.eye}"/><circle cx="${x + r * .36}" cy="${hy + r * .05}" r="${r * .11}" fill="${SK.eye}"/>
+      <path d="M${x - r * .32} ${hy + r * .42} Q${x} ${hy + r * .7} ${x + r * .32} ${hy + r * .42}" fill="none" stroke="${SK.mouth}" stroke-width="${r * .1}" stroke-linecap="round"/></g>`;
+  }
+  function thought() {
+    const cloud = 'M420 232 A58 58 0 0 1 392 132 A70 70 0 0 1 500 70 A130 130 0 0 1 690 62 A76 76 0 0 1 812 118 A62 62 0 0 1 800 232 A150 150 0 0 1 610 244 A150 150 0 0 1 420 232Z';
+    const b = 236, hm = b - 98 * .4 + 6, hs = b - 86 * .4 + 6;
+    return `<g class="od-think" aria-hidden="true">
+      <defs><linearGradient id="odThink" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7cc8ff"/><stop offset=".7" stop-color="#cfe9ff"/><stop offset="1" stop-color="#ffe2c4"/></linearGradient><clipPath id="odThinkClip"><path d="${cloud}"/></clipPath></defs>
+      <circle class="tb tb1" cx="666" cy="293" r="4.5" fill="#fff"/><circle class="tb tb2" cx="653" cy="279" r="6.5" fill="#fff"/><circle class="tb tb3" cx="638" cy="263" r="8.5" fill="#fff"/>
+      <g class="tc"><path d="${cloud}" fill="url(#odThink)"/>
+        <g clip-path="url(#odThinkClip)"><circle cx="768" cy="150" r="22" fill="#fff3c4" opacity=".9"/><path d="M430 168 q14 -14 30 -2 q12 -10 24 2Z M736 196 q10 -10 22 -1 q9 -7 18 1Z" fill="#fff" opacity=".85"/>
+          <ellipse cx="610" cy="282" rx="250" ry="52" fill="#6cc28a"/><ellipse cx="610" cy="276" rx="200" ry="36" fill="#7fd39b"/>
+          ${person(548, b, 106, { top: '#4a78c2', legs: '#2d3550', lh: [521, b - 44], rh: [579, hm] })}
+          ${person(610, b, 98, { top: '#b0476b', dress: true, long: true, lh: [583, hm], rh: [639, hs] })}
+          ${person(668, b, 86, { top: '#2fa889', legs: '#3b4a7a', long: true, tail: true, lh: [643, hs], rh: [694, b - 34] })}
+          <path d="M720 166 c-5 -8 -17 -4 -12 5 l12 12 l12 -12 c5 -9 -7 -13 -12 -5Z" fill="#ff6b8a"/>
+          <text x="604" y="92" text-anchor="middle" font-family="Hanken Grotesk, sans-serif" font-weight="800" font-size="25" fill="#22184a">Everything I’ve done</text>
+          <text x="604" y="120" text-anchor="middle" font-family="Hanken Grotesk, sans-serif" font-weight="800" font-size="25" fill="#22184a">is because of them.</text></g>
+        <path d="${cloud}" fill="none" stroke="#fff" stroke-width="6"/></g></g>`;
+  }
   function offDuty() {
     reseed(9);
     const obj = (id, label, inner) => `<g class="obj" data-obj="${id}" tabindex="0" role="button" aria-label="${label}">${inner}</g>`;
@@ -323,44 +360,19 @@ const Scenes = (() => {
         <path d="M24 40 C24 12 64 12 64 40" fill="none" stroke="#1d2a3d" stroke-width="6"/><rect x="18" y="28" width="12" height="16" rx="4" fill="#2b3d57"/><rect x="58" y="28" width="12" height="16" rx="4" fill="#2b3d57"/>
         <rect x="88" y="18" width="46" height="26" rx="5" fill="#1f2433"/><circle cx="111" cy="31" r="9" fill="#3b4b6b"/><circle cx="111" cy="31" r="5" fill="#46d9ff" opacity=".6"/><rect x="92" y="14" width="12" height="6" rx="2" fill="#1f2433"/></g>`)}
       ${obj('globe', 'Places and cultures', `<g transform="translate(520 560)"><path d="M0 30 h40 M20 30 V18" stroke="#c9a14a" stroke-width="5"/><circle cx="20" cy="-6" r="24" fill="#2b6fb3"/><path d="M6 -20 c8 4 6 12 14 12 c6 0 4 10 10 12 M24 -28 c-4 6 4 8 8 6" fill="none" stroke="#43eba0" stroke-width="4" stroke-linecap="round"/><path d="M-6 -6 a26 26 0 0 0 52 0" fill="none" stroke="#c9a14a" stroke-width="3"/></g>`)}
-      ${obj('coffee', 'Coffee', `<g transform="translate(812 560)"><rect x="-10" y="20" width="80" height="8" rx="3" fill="#6b4a37"/><rect x="0" y="28" width="6" height="40" fill="#4d3527"/><rect x="54" y="28" width="6" height="40" fill="#4d3527"/>
-        <rect x="18" y="-6" width="24" height="26" rx="4" fill="#f3f5f8"/><path d="M42 0 c9 0 9 13 0 13" fill="none" stroke="#f3f5f8" stroke-width="3.4"/><path d="M31 1 l-5 8 h5 l-3 7 l8 -10 h-5 l3 -5Z" fill="#46d9ff"/>
-        <g class="ch-steam" fill="none" stroke="#fff" stroke-width="2" opacity=".7"><path d="M25 -12 c-4 -6 4 -8 0 -14"/><path d="M34 -12 c-4 -6 4 -8 0 -14"/></g></g>`)}
-      ${obj('robot', 'Robotics and AI', `<g transform="translate(935 548)"><rect x="0" y="0" width="44" height="36" rx="8" fill="#c9d3e3"/><rect x="6" y="8" width="32" height="16" rx="5" fill="#16223a"/><circle cx="15" cy="16" r="3.4" fill="#46d9ff"/><circle cx="29" cy="16" r="3.4" fill="#46d9ff"/>
-        <path d="M22 0 V-12" stroke="#c9d3e3" stroke-width="3"/><circle cx="22" cy="-14" r="4" fill="#ff7a59" class="ch-blink"/><rect x="6" y="36" width="32" height="26" rx="4" fill="#aeb9cc"/><rect x="2" y="62" width="14" height="10" rx="3" fill="#7d889e"/><rect x="28" y="62" width="14" height="10" rx="3" fill="#7d889e"/></g>`)}
+      ${obj('family', 'Family', `<g transform="translate(812 560)"><rect x="-10" y="20" width="80" height="8" rx="3" fill="#6b4a37"/><rect x="0" y="28" width="6" height="40" fill="#4d3527"/><rect x="54" y="28" width="6" height="40" fill="#4d3527"/>
+        <path d="M14 20 L20 -4 M46 20 L40 -4" stroke="#4d3527" stroke-width="3"/><rect x="4" y="-30" width="52" height="42" rx="4" fill="#8a5a3c"/><rect x="9" y="-25" width="42" height="32" rx="2" fill="#9fd8ff"/>
+        <path d="M9 1 Q30 -6 51 1 V7 H9Z" fill="#6cc28a"/>${[[20, 5, 2.6], [30, 5, 2.4], [39, 5, 2.1]].map(([x, y, r]) => `<circle cx="${x}" cy="${y - 12}" r="${r}" fill="${SK.skin}"/><rect x="${x - r}" y="${y - 9}" width="${r * 2}" height="${r * 3.4}" rx="${r}" fill="${['#4a78c2', '#b0476b', '#2fa889'][[20, 30, 39].indexOf(x)]}"/>`).join('')}
+        <path d="M58 -40 c-3 -5 -10 -2 -7 3 l7 7 l7 -7 c3 -5 -4 -8 -7 -3Z" fill="#ff6b8a" class="ch-blink"/></g>`)}
+      ${obj('ai', 'Energy and AI', `<g transform="translate(935 548)"><circle cx="24" cy="12" r="30" fill="#46d9ff" opacity=".16"/>
+        <rect x="4" y="46" width="40" height="26" rx="4" fill="#3b4160"/><rect x="0" y="40" width="48" height="8" rx="3" fill="#5a6385"/>
+        <g fill="#9aa6bd">${[12, 20, 28, 36].map(v => `<rect x="${v - 1.5}" y="-12" width="3" height="7"/><rect x="${v - 1.5}" y="29" width="3" height="7"/><rect x="-6" y="${v - 13.5}" width="7" height="3"/><rect x="47" y="${v - 13.5}" width="7" height="3"/>`).join('')}</g>
+        <rect x="4" y="-6" width="40" height="36" rx="5" fill="#16223a" stroke="#46d9ff" stroke-width="2"/><path d="M27 0 l-9 13 h7 l-4 12 l12 -15 h-7 l4 -10Z" fill="#43eba0"/></g>`)}
       ${obj('rocket', 'Startups', `<g transform="translate(1090 520)"><path d="M20 0 C34 14 36 44 30 66 H10 C4 44 6 14 20 0Z" fill="#eef2f6"/><circle cx="20" cy="28" r="7" fill="#46d9ff"/><path d="M10 52 L-2 72 H10Z M30 52 L42 72 H30Z" fill="#ff7a59"/><path class="flame" d="M12 68 Q20 96 28 68Z" fill="#ffc15e"/></g>`)}
       <g class="od-ch">${Character.svg({ pose: 'stand', expr: 'happy', place: [590, 300, 160, 298], cls: 'ch-off' })}</g>
+      ${thought()}
       ${obj('football', 'Football: take a shot', `<g class="ball"><circle cx="760" cy="586" r="17" fill="#f4f4f0"/><path d="M760 577 l7.5 5 -2.8 8.6 h-9.4 l-2.8 -8.6Z" fill="#1d2433"/><path d="M760 577 v-8 M767.5 582 l7 -3 M764.7 590.6 l5 6 M755.3 590.6 l-5 6 M752.5 582 l-7 -3" stroke="#1d2433" stroke-width="1.6"/></g>`)}
       <text class="gol" x="1045" y="300" text-anchor="middle" font-family="Anybody, sans-serif" font-weight="900" font-size="64" fill="#ffd76a" opacity="0">GOOOL!</text>
-    </svg>`;
-  }
-
-  /* ------------------------------ LOUNGE ------------------------------ */
-  function lounge() {
-    reseed(21);
-    return `<svg viewBox="0 0 1000 600" class="lounge-svg" role="img" aria-label="A lounge at night: Phelo asleep on a couch under a lamp">
-      <defs><linearGradient id="lgWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#151036"/><stop offset="1" stop-color="#241a4e"/></linearGradient>
-        <radialGradient id="lgLamp" cx="150" cy="250" r="380" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffb547" stop-opacity=".32"/><stop offset="1" stop-color="#ffb547" stop-opacity="0"/></radialGradient></defs>
-      <rect width="1000" height="600" fill="url(#lgWall)"/><rect width="1000" height="600" fill="url(#lgLamp)"/>
-      <g><rect x="640" y="70" width="270" height="230" rx="8" fill="#2c2358"/><rect x="652" y="82" width="246" height="206" fill="#070f2a"/>
-        <g transform="translate(652 82)">${stars(30, 246, 130).replace('<g class="stars">', '<g>')}</g>
-        <circle cx="840" cy="130" r="26" fill="#f4efd9"/><circle cx="850" cy="124" r="22" fill="#070f2a"/>
-        <path d="M652 250 C700 238 760 246 810 236 C850 230 880 236 898 232 V288 H652Z" fill="#0c1a3a"/>
-        <g fill="#ffd58a">${Array.from({ length: 22 }, (_, i) => `<rect class="tw" x="${662 + i * 11}" y="${254 + (i % 4) * 6}" width="3" height="3" style="animation-delay:${(i * 0.4) % 5}s"/>`).join('')}</g>
-        <path d="M775 82 V288 M652 185 H898" stroke="#2c2358" stroke-width="7"/></g>
-      <g><path d="M150 520 V230" stroke="#3a3354" stroke-width="6"/><ellipse cx="150" cy="522" rx="34" ry="8" fill="#2a2440"/><path d="M104 230 L122 170 H178 L196 230Z" fill="#ffcf7a"/><path d="M104 230 L40 520 H262 L196 230Z" fill="#ffcf7a" opacity=".07"/></g>
-      <rect x="0" y="520" width="1000" height="80" fill="#120d2a"/><ellipse cx="460" cy="560" rx="330" ry="26" fill="#2e2460" opacity=".8"/>
-      <g class="couch"><rect x="250" y="350" width="420" height="124" rx="26" fill="#29507e"/>
-        <rect x="262" y="360" width="196" height="106" rx="20" fill="#2f5c8f"/><rect x="464" y="360" width="196" height="106" rx="20" fill="#2f5c8f"/>
-        <rect x="230" y="462" width="460" height="46" rx="14" fill="#244670"/><rect x="214" y="414" width="58" height="100" rx="20" fill="#223f66"/><rect x="648" y="414" width="58" height="100" rx="20" fill="#223f66"/>
-        <rect x="236" y="508" width="12" height="14" fill="#151030"/><rect x="672" y="508" width="12" height="14" fill="#151030"/>
-        <rect x="560" y="392" width="76" height="64" rx="14" fill="#ffb547" opacity=".85" transform="rotate(-10 598 424)"/></g>
-      <g class="lg-ch">${Character.svg({ pose: 'doze', expr: 'sleep', place: [300, 224, 165, 307], cls: 'ch-lounge' })}</g>
-      <g><rect x="740" y="452" width="120" height="10" rx="3" fill="#4d3a6e"/><rect x="752" y="462" width="8" height="58" fill="#3a2b55"/><rect x="840" y="462" width="8" height="58" fill="#3a2b55"/>
-        <rect x="764" y="424" width="22" height="28" rx="4" fill="#e9eef5"/><path d="M786 430 c8 0 8 12 0 12" fill="none" stroke="#e9eef5" stroke-width="3"/>
-        <g class="lavalamp"><path d="M812 452 L818 404 H838 L844 452Z" fill="#46d9ff" opacity=".35"/><circle class="blob" cx="828" cy="436" r="6" fill="#43eba0"/><rect x="814" y="398" width="28" height="8" rx="3" fill="#2c2358"/></g></g>
-      <g><path d="M930 520 c-10 -40 -4 -70 10 -90 M930 520 c4 -40 20 -60 40 -70 M930 520 c-14 -30 -30 -46 -50 -50" stroke="#43a072" stroke-width="10" stroke-linecap="round" fill="none"/><path d="M906 520 h48 l-6 40 h-36Z" fill="#7a4a3a"/></g>
-      <g class="zzz" font-family="Anybody, sans-serif" font-weight="800" fill="#cfe6ff"><text x="420" y="250" font-size="22">z</text><text x="440" y="226" font-size="28">z</text><text x="466" y="196" font-size="36">Z</text></g>
     </svg>`;
   }
 
@@ -421,5 +433,5 @@ const Scenes = (() => {
     </svg>`;
   }
 
-  return { heroSky, heroCore, ground, room, levelArt, SKIES, GROUNDS, station, fieldSky, offDuty, lounge, contactSky, tower, turbine, trainerRoom, trainerSlide };
+  return { heroSky, heroCore, ground, room, levelArt, SKIES, GROUNDS, station, fieldSky, offDuty, contactSky, tower, turbine, trainerRoom, trainerSlide };
 })();

@@ -61,11 +61,13 @@ const CONTENT = {
       notes: ['Hagan International Scholarship', 'ECE Achievement Award', 'Focus: AI and optimization for energy systems'] }
   ],
   coursework: [
-    { group: 'Electrical & power', items: ['Circuits & Electronics', 'Electromagnetism', 'Advanced Circuits Design', 'Electric Machines (UNL)', 'Power Electronics (UNL)', 'Power Systems', 'Smart Grid', 'Electric Vehicles', 'Power Plant Technology'] },
-    { group: 'Mechanical & mechatronics', items: ['Engineering Dynamics', 'Mechanics of Materials', 'Materials Science', 'Machine Design I & II', 'Mechanical Vibrations', 'Mechatronics & Robotics (UNL)', 'Engineering Drawing', 'Computer-Aided Design & Engineering', 'Engineering Production'] },
-    { group: 'Thermal, fluids & energy', items: ['Thermodynamics', 'Advanced Thermodynamics', 'Heat Transfer', 'Fluid Mechanics I & II', 'Aerodynamics', 'Rotor Aerodynamics', 'Renewable Energy Systems', 'Photovoltaic Systems', 'Thermal Solar Energy', 'Advanced Thermal Systems', 'Optics & Photonics'] },
-    { group: 'Control, math & computing', items: ['Control Systems', 'Advanced Control Systems', 'Calculus I & II', 'Linear Algebra', 'Ordinary & Partial Differential Equations', 'Probability & Statistics', 'Numerical Analysis (UNL)', 'Computer Science'] },
-    { group: 'Engineering practice', items: ['Systems Engineering', 'Project Management', 'Project Economics', 'Renewable Energy Law & Economics', 'Ethics & Safety', 'Entrepreneurship & Small Business', 'Scientific Writing', 'Industrial Training', 'Senior Design I & II'] }
+    { group: 'Electrical & power', items: ['Circuits & Electronics', 'Advanced Circuits Design', 'Electric Machines', 'Power Electronics', 'Power Systems', 'Smart Grid', 'Electric Vehicles', 'Power Plant Technology'] },
+    { group: 'Renewable & thermal energy', items: ['Renewable Energy Systems', 'Photovoltaic Systems', 'Thermal Solar Energy', 'Selected Topics in Renewable Energy Engineering', 'Thermodynamics for Engineers', 'Advanced Thermodynamics', 'Special Topics in Advanced Thermal Systems', 'Heat Transfer', 'Fluid Mechanics I & II', 'Aerodynamics', 'Rotor Aerodynamics', 'Optics & Photonics'] },
+    { group: 'Control, math & computing', items: ['Control Systems', 'Advanced Control Systems', 'Calculus I & II', 'Linear Algebra & Vector Geometry', 'Ordinary Differential Equations', 'Partial Differential Equations', 'Probability & Statistics', 'Numerical Analysis', 'Introduction to Computer Science'] },
+    { group: 'Mechanical & mechatronics', items: ['Introduction to Engineering Design', 'Engineering Drawing', 'Computer-Aided Design & Engineering', 'Engineering Dynamics', 'Mechanics of Materials', 'Materials Science & Engineering', 'Machine Design I & II', 'Mechanical Vibrations', 'Mechatronics & Robotics', 'Engineering Production'] },
+    { group: 'Engineering management & economics', items: ['Systems Engineering', 'Engineering Project Management', 'Engineering Project Economics', 'Renewable Energy Law & Economics', 'Entrepreneurship & Small Business Management', 'Entrepreneurship for Engineers', 'Engineering Ethics & Safety', 'Leadership & Professionalism', 'Industrial Training', 'Senior Design Project I & II'] },
+    { group: 'Sciences', items: ['Classical Mechanics (with lab)', 'Electromagnetism (with lab)', 'Chemistry I (with lab)', 'Biology I (with lab)'] },
+    { group: 'Communication & humanities', items: ['Advanced Academic Speaking & Writing', 'Effective Speaking & Composition', 'Scientific Writing', 'Arabic Literature', 'Positive Psychology'] }
   ],
 
   /* ---------- PROJECTS ---------- */
@@ -278,38 +280,33 @@ const CONTENT = {
 
   /* ---------- INTERESTS ---------- */
   interests: [
-    { id: 'football', label: 'Football', msg: 'Barça and Messi. Enough said. Click the ball to take a shot.' },
+    { id: 'football', label: 'Football', msg: 'Barça and Messi. Enough said. Select the ball to take a shot.' },
     { id: 'gym', label: 'Gym & fitness', msg: 'Leg day is just a load test with feelings.' },
-    { id: 'swim', label: 'Swimming', msg: 'Swimming: the one place notifications can’t reach.' },
+    { id: 'swim', label: 'Swimming', msg: 'I won two medals and a cup in swimming.' },
     { id: 'music', label: 'Music & photography', msg: 'Music and photography are how I switch off.' },
     { id: 'globe', label: 'Places & cultures', msg: 'Lived and studied in Egypt, Nebraska and Florida. Always up for the next place.' },
-    { id: 'coffee', label: 'Coffee', msgs: ['Coffee: my preferred energy storage system.', 'Peak demand detected. Dispatching coffee.', 'Charging… 47%. Please do not unplug the engineer.', 'This cup has been reheated twice. Engineering requires sacrifices.'] },
-    { id: 'robot', label: 'Robotics & AI', msg: 'Things that sense, think and move. Still waiting for one that makes coffee.' },
+    { id: 'family', label: 'Family', msg: 'Everything I’ve done is because of them.' },
+    { id: 'ai', label: 'Energy & AI', msg: 'Where my work lives: AI that makes energy cleaner, cheaper and smarter.' },
     { id: 'rocket', label: 'Startups', msg: 'Long-term plan: a company that uses AI to solve energy problems in the Middle East and Africa.' }
   ],
 
-  /* ---------- FUN FACTS ---------- */
+  /* ---------- FACTS ---------- */
   facts: [
     'I co-founded the Egyptian Students Association at UNL during a single exchange semester.',
     'I’ve mentored 300+ USAID scholars getting ready to study abroad.',
     'In high school I won gold in Canada (ICAN) for a nanomaterial water filter and a smart aeroponics system.',
     'I once pitched a new way to live on Mars and won the People’s Choice Award for it.',
-    'I can go from power systems to AI to football to startup ideas in one conversation.',
-    'I’m an engineer, but I don’t want my whole personality to be an engineering equation.',
     'As far as I know, I’m the first person from my city to become a Gator.',
     'I joined a research lab in Nebraska by walking up to the faculty and asking.',
     'I was head organizer for the Zewail City and USAID graduation ceremonies.',
-    'I worked on the electrical/power team of an electric race car.',
-    'I tend to think big and keep exploring new ideas. This website is evidence.',
-    'Photography and music are how I switch off.',
+    'I worked on the electrical and power team of an electric race car.',
     'My entrepreneurship team made AUC’s Grand Challenge top 10, with a 50,000 EGP prize.',
     'Sports record: two swimming medals and a cup, a football medal, and best player of a football tournament.',
-    'I can whistle. It made the list.',
-    'I give everything my best try. I’d rather regret something I tried and failed at than something I never tried.'
+    'I can go from power systems to AI to football to startup ideas in one conversation.',
+    'I’d rather regret something I tried and failed at than something I never tried.'
   ],
 
   /* ---------- NOW & NEXT ---------- */
-  done: ['B.Eng. in Renewable Energy Engineering (2025)', 'First journal paper published (Jun 2026)', 'AI energy management thesis: 32% lower operating cost', 'Research on solid-state transformer magnetics in Nebraska', 'Internships at Halliburton, Elsewedy Electric and Tomorrow Solar'],
   doing: ['M.S. ECE at UF, thesis track', 'Research in UF’s TEA Lab: AI for safe autonomous systems, with a paper in progress', 'Second paper: AI models for e-motorcycle battery packs', 'Co-developing a Solar + EV optimization app', 'ECE Ambassador and the EII IGNITE entrepreneurship program'],
   next: ['Thesis research on AI-driven optimization of energy systems, especially data centers', 'A summer 2027 energy research internship', 'Long term: research, technology and a company that uses AI to solve energy problems in the Middle East and Africa']
 };
